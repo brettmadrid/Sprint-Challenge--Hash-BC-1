@@ -3,8 +3,6 @@ import requests
 
 import sys
 
-from uuid import uuid4
-
 from timeit import default_timer as timer
 
 import random
@@ -15,34 +13,30 @@ def proof_of_work(last_proof):
     Multi-Ouroboros of Work Algorithm
     - Find a number p' such that the last six digits of hash(p) are equal
     to the first six digits of hash(p')
-    - IE:  last_hash: ...AE9123456, new hash 123456888...
+    - IE:  last_hash: ...999123456, new hash 123456888...
     - p is the previous proof, and p' is the new proof
-    - Use the same method to generate SHA-256 hashes as the examples in class
     """
 
     start = timer()
 
     print("Searching for next proof")
-    proof = random.randint(-2147483647, 2147483647)
-    last_hash = hashlib.sha3_256(str(last_proof).encode()).hexdigest()
+    proof = random.randint(-2147483648, 2147483648)
+    last_hash = hashlib.sha256(str(last_proof).encode()).hexdigest()
     while valid_proof(last_hash, proof) is False:
         proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
-    print("Proof hash is: ", hashlib.sha3_256(str(proof).encode()).hexdigest())
+    print("Proof hash is: ", hashlib.sha256(str(proof).encode()).hexdigest())
     return proof
 
 
 def valid_proof(last_hash, proof):
     """
     Validates the Proof:  Multi-ouroborus:  Do the last six characters of
-    the hash of the last proof match the first six characters of the hash
-    of the new proof?
-
-    IE:  last_hash: ...AE9123456, new hash 123456E88...
+    the last hash matchc the first six characters of the proof?
+    IE:  last_hash: ...999123456, new hash 123456888...
     """
 
-    # TODO: Your code here!
     guess = hashlib.sha256(str(proof).encode()).hexdigest()
 
     return guess[:6] == last_hash[-6:]
