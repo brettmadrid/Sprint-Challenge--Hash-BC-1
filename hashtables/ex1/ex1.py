@@ -10,7 +10,7 @@ def get_indices_of_item_weights(weights, length, limit):
     for i in range(length):
         # is the limit-weight[i] value stored in ht as a key
         val = hash_table_retrieve(ht, limit - weights[i])
-        print(val, weights[i], limit-weights[i])
+        # print(val, weights[i], limit-weights[i])
         if val is not None:
             answer = (i, val)
             return answer
